@@ -36,7 +36,7 @@ class FileReader(FileReaderBase):
             df['UTCTime'] = df['UTCTime'].apply(lambda x: datetime.strptime(x, "%a %b %d %H:%M:%S +0000 %Y"))
             df['UTCTimeOffset'] = df['UTCTime'] + df['TimezoneOffset'].apply(lambda x: timedelta(hours=x/60))
         # df['UTCTimeOffsetEpoch'] = df['UTCTimeOffset'].apply(lambda x: x.strftime('%s'))
-        # windows 不支持 %s
+        # windows does not support %s
         df['UTCTimeOffsetEpoch'] = df['UTCTimeOffset'].apply(lambda x: x.timestamp())
         df['UTCTimeOffsetWeekday'] = df['UTCTimeOffset'].apply(lambda x: x.weekday())
         df['UTCTimeOffsetHour'] = df['UTCTimeOffset'].apply(lambda x: x.hour)
@@ -221,7 +221,7 @@ class FileReader(FileReaderBase):
 
         assert len(pseudo_session_trajectory_id) == len(df)
 
-        # 确保每个pseudo_session_trajectory_id只属于一个用户
+        # Ensure each pseudo_session_trajectory_id only belongs to one user
         for user, user1, user2, pseudo_session_trajectory_id1, pseudo_session_trajectory_id2 in zip(
             df['UserId'],
             df['UserId'].shift(1),
