@@ -58,6 +58,8 @@ Manually redownload the traj2traj files and placed them in the folders tky and t
 
 ## Run
 
+Train/validate/test per YAML (logs in: tensorboard/, log/).
+
 ```bash
 python run.py -f best_conf/{dataset_name}.yml
 # dataset_name ∈ {nyc, tky, ca}
@@ -66,6 +68,20 @@ python run.py -f best_conf/{dataset_name}.yml
 Copy paste example:
 ```bash
 python run.py -f best_conf/nyc.yml
+```
+
+## Test
+
+Evaluate using latest checkpoint if run_args.init_checkpoint is unset; set run_args.visualize: True to log images.
+
+```bash
+python run_test.py -f best_conf/nyc.yml
+```
+
+Open TensorBoard; run_test.py writes to log/, run.py writes to tensorboard/.
+
+```bash
+tensorboard --logdir log
 ```
 
 ## Citation
