@@ -5,18 +5,17 @@ This guide shows how to review metrics, logs, and checkpoints from previous runs
 Example runs detected:
 
 ```
-tensorboard/20251111_153849/nyc
 tensorboard/20251111_143142/nyc
 tensorboard/20251111_130942/nyc
 ```
 
-Pick the latest (20251111_153849/nyc) for the examples below.
+Pick the latest (20251111_143142/nyc) for the examples below.
 
 ## 1) Inspect checkpoint and TensorBoard files
 
 - List files in the run directory
   ```bash
-  ls -l tensorboard/20251111_153849/nyc
+  ls -l tensorboard/20251111_143142/nyc
   ```
   Expect to see:
   - `checkpoint.pt`
@@ -28,12 +27,12 @@ Logs are stored separately under `log/<timestamp>/<dataset>/train.log`.
 
 - Show the tail of the log
   ```bash
-  tail -n 60 log/20251111_153849/nyc/train.log
+  tail -n 60 log/20251111_143142/nyc/train.log
   ```
 
 - Extract the final test summary (saved when `do_test` ran)
   ```bash
-  grep -n "Test evaluation result" log/20251111_153849/nyc/train.log
+  grep -n "Test evaluation result" log/20251111_143142/nyc/train.log
   ```
   Example line structure:
   ```
@@ -42,14 +41,14 @@ Logs are stored separately under `log/<timestamp>/<dataset>/train.log`.
 
 - During training, validation/test snapshots are also logged periodically. To view:
   ```bash
-  grep -n "[Evaluating] Recall@" log/20251111_153849/nyc/train.log | tail -n 10
+  grep -n "[Evaluating] Recall@" log/20251111_143142/nyc/train.log | tail -n 10
   ```
 
 ## 3) Visualize in TensorBoard
 
 - Open TensorBoard scoped to this run or the whole directory
   ```bash
-  tensorboard --logdir tensorboard/20251111_153849/nyc
+  tensorboard --logdir tensorboard/20251111_143142/nyc
   # or
   tensorboard --logdir tensorboard
   ```
@@ -91,15 +90,15 @@ Artifacts:
 
 Quick peeks:
 ```bash
-head -n 5 log/20251111_153849/nyc/class_metrics.csv
-head -n 5 log/20251111_153849/nyc/test_predictions.csv
+head -n 5 log/20251111_143142/nyc/class_metrics.csv
+head -n 5 log/20251111_143142/nyc/test_predictions.csv
 ```
 
 ## 7) Quick sanity checks
 
 - Number of POIs (for random-baseline intuition):
   ```bash
-  grep -n "[Initialize Dataset] #poi:" log/20251111_153849/nyc/train.log
+  grep -n "[Initialize Dataset] #poi:" log/20251111_143142/nyc/train.log
   ```
   A purely random top-K predictor has `Recall@K ≈ K / #poi` (should be very small). Your model should exceed this by a wide margin.
 
