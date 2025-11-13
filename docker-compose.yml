@@ -1,0 +1,30 @@
+services:
+  app:
+    # Why: Build once and reuse for commands; binds source for live dev.
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: poi-prediction:torch2.3.1-cu121
+    working_dir: /app
+    volumes:
+      - .:/app
+    # Why: Restrict to a single NVIDIA GPU for consistent behavior.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: ["gpu"]
+    tty: true
+
+  tensorboard:
+    # Why: Separate service to visualize logs without interfering with training.
+    image: poi-prediction:torch2.3.1-cu121
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: bash -lc "tensorboard --logdir log --port 6007 --host 0.0.0.0"
+    ports:
+      - "6007:6007"
+    # No GPU required for TensorBoard.
