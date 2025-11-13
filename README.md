@@ -11,7 +11,7 @@ The model introduces graph attention and channel attention mechanisms to adaptiv
 - Enhances representation of spatio-temporal dependencies among users, POIs, and trajectories.
 - Fully compatible with the same dataset format and training scripts as the original STHGCN.
 
-## Setup
+## Setup options
 
 ```bash
 git clone https://github.com/yourusername/POI-prediction.git
@@ -19,16 +19,40 @@ git clone https://github.com/yourusername/POI-prediction.git
 cd POI-prediction
 ```
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -V
-pip -V
-```
+### Option A) Local Python (venv; Python 3.10)
 
 ```bash
+python3.10 -m venv .venv
+source .venv/bin/activate
+pip install -U pip
 pip install -r requirements.txt
 ```
+
+### Option B) Docker Compose (CUDA 12.1; PyTorch 2.3.1)
+
+Prereqs: NVIDIA drivers + NVIDIA Container Toolkit on host if using GPU.
+
+```bash
+docker compose build
+
+# Train
+docker compose run --rm app python run.py -f best_conf/{dataset}.yml
+
+# Test
+docker compose run --rm app python run_test.py -f best_conf/{dataset}.yml
+
+# TensorBoard (training runs are under tensorboard/)
+docker compose up -d tensorboard
+# open http://localhost:6007
+
+# To visualize run_test logs instead, run one-off TB on log/
+docker compose run --service-ports --rm tensorboard \
+  bash -lc "tensorboard --logdir log --port 6007 --host 0.0.0.0"
+```
+
+Notes:
+- Compose binds the repo at /app, so local data/ is available in the container.
+- GPU usage: compose is set to NVIDIA GPU id 0 for the app service; adjust `device_ids` if needed.
 
 Go to https://drive.google.com/drive/folders/1s5ps5Zk2932R3WRpNdNdekGHg0lOfB32 download the 'data' file into the root directory like:
 

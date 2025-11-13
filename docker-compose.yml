@@ -24,7 +24,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    command: bash -lc "tensorboard --logdir log --port 6007 --host 0.0.0.0"
+    command: bash -lc "tensorboard --logdir tensorboard --port 6007 --host 0.0.0.0"
     ports:
       - "6007:6007"
     # No GPU required for TensorBoard.

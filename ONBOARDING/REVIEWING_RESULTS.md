@@ -11,6 +11,10 @@ tensorboard/20251111_130942/nyc
 
 Pick the latest (20251111_143142/nyc) for the examples below.
 
+> Environment: You can follow these steps either on your local venv or via Docker.
+> - venv: run the commands as written.
+> - Docker: prefix Python commands with `docker compose run --rm app` and use the `tensorboard` service to visualize.
+
 ## 1) Inspect checkpoint and TensorBoard files
 
 - List files in the run directory
@@ -47,11 +51,22 @@ Logs are stored separately under `log/<timestamp>/<dataset>/train.log`.
 ## 3) Visualize in TensorBoard
 
 - Open TensorBoard scoped to this run or the whole directory
-  ```bash
-  tensorboard --logdir tensorboard/20251111_143142/nyc
-  # or
-  tensorboard --logdir tensorboard
-  ```
+  - venv:
+    ```bash
+    tensorboard --logdir tensorboard/20251111_143142/nyc
+    # or
+    tensorboard --logdir tensorboard
+    ```
+  - Docker (Compose service reads from tensorboard/):
+    ```bash
+    docker compose up -d tensorboard
+    # open http://localhost:6007
+    ```
+    To switch TensorBoard to parse text logs from `log/` instead (e.g., run_test.py), run a one-off TB:
+    ```bash
+    docker compose run --service-ports --rm tensorboard \
+      bash -lc "tensorboard --logdir log --port 6007 --host 0.0.0.0"
+    ```
   Useful tags:
   - `train/loss_step`, `train/loss_epoch`
   - `validate/Recall@K`, `validate/MRR`, `validate/eval_loss`
